@@ -111,7 +111,7 @@ jobs:
         run: |
           git apply --ignore-whitespace --reject --whitespace=fix --verbose ./builder/1_17_patch.patch
 
-      - uses: actions/setup-python@v4 
+      - uses: actions/setup-python@v5
         with: 
           python-version: ${{ env.ORT_PYTHON_VERSION }}
 
@@ -186,10 +186,12 @@ jobs:
           tar cfz "${{ matrix.artifact_name }}-${{ env.VERSION }}.tgz" "${{ matrix.artifact_name }}-${{ env.VERSION }}/"
 
       - name: Upload to Release
-        uses: softprops/action-gh-release@v1
+        uses: svenstaro/upload-release-action@v2
         with:
-          files: "*.tgz"
-          tag_name: ${{ env.VERSION }}
+          file: "*.tgz"
+          tag: ${{ env.VERSION }}
+          overwrite: true
+          file_glob: true
 
   build-aar:
     strategy:
@@ -219,10 +221,12 @@ jobs:
           tar cfz "${{ matrix.artifact_name }}-${{ env.VERSION }}.tgz" "${{ matrix.artifact_name }}-${{ env.VERSION }}/"
 
       - name: Upload to Release
-        uses: softprops/action-gh-release@v1
+        uses: svenstaro/upload-release-action@v2
         with:
-          files: "*.tgz"
-          tag_name: ${{ env.VERSION }}
+          file: "*.tgz"
+          tag: ${{ env.VERSION }}
+          overwrite: true
+          file_glob: true
 
   build-xcframework:
     strategy:
@@ -244,7 +248,7 @@ jobs:
           submodules: recursive
           github-server-url: https://github.com
         
-      - uses: actions/setup-python@v4 
+      - uses: actions/setup-python@v5
         with: 
           python-version: ${{ env.ORT_PYTHON_VERSION }}
       
@@ -259,7 +263,9 @@ jobs:
           7z a "${{ matrix.artifact_name }}-${{ env.VERSION }}.zip" "${{ matrix.artifact_name }}-${{ env.VERSION }}"          
   
       - name: Upload to Release
-        uses: softprops/action-gh-release@v1
+        uses: svenstaro/upload-release-action@v2
         with:
-          files: "*.zip"
-          tag_name: ${{ env.VERSION }}
+          file: "*.zip"
+          tag: ${{ env.VERSION }}
+          overwrite: true
+          file_glob: true
